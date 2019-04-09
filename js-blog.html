@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><title>Censored Bearshares feeds</title>
+    <meta charset="UTF-8">
+	<script src="bears.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.js"></script>
+    <style type="text/css">    
+    body {
+        font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+    }
+    p {
+        font-size: 1.2EM;
+    }
+    a {
+        color: #bf1fb9;
+        font-size: 2.5EM;        
+    }
+    img {
+        padding-left:5px;
+        padding-right:5px;
+        max-width:80%;
+        margin-left:auto;
+        margin-right:auto;
+        } 
+        
+    .headr { height:150px;}       
+    .censored {
+        width: 60%;
+        margin-left: auto;
+        margin-right: auto;    
+    }
+
+    .inner {
+        //float:left;
+        //width:47%;
+        margin-left:auto;
+        margin-right:auto;
+        margin-bottom:15px;
+        padding: 10px 5px 10px 5px;
+        border: 1px solid #bf1fb9; 
+        border-radius: 5px;    
+        overflow: hidden;       
+    }
+    h2 {
+        margin-top: 6%;
+    }
+    .headdiv {
+        color: #bf1fb9;
+        position: fixed;
+        top: 0px;
+        width: 100%;
+        background-image: url(https://www.designbolts.com/wp-content/uploads/2014/06/Purple-twitter-header-background.jpg);
+        background-size: cover;
+        background-repeat: round;
+        
+    }
+    #navbar {transition: top 0.7s; /* Transition effect when sliding down (and up) */}
+    .cleft{
+        float:left;
+        width:47%;
+        margin-left:auto;
+        margin-right:auto;
+        padding: 5px 10px 5px 10px; 
+        border: 1px solid #bf1fb9; 
+        border-radius: 5px;    
+        overflow: hidden;        
+    } 
+    #fleft {
+        float:left;
+        border:none;
+        width: 47%;
+    }    
+    .cright {
+        float:right;
+        width:47%;
+        margin-left:auto;
+        margin-right:auto;
+        padding: 5px 10px 5px 10px; 
+        border: 1px solid #bf1fb9; 
+        border-radius: 5px;    
+        overflow: hidden;        
+    }
+    #fright {
+        float:right;
+        border:none;
+        width: 47%;
+    }
+
+    .subhead {
+        margin-left: auto;
+        margin-right: auto;
+        padding: 90px 10px 5px 10px;
+        overflow: hidden;
+        font-size: 3.5EM;
+        font-weight: bold;
+        color: #fff;
+        height: 100px;
+        position: relative;
+        //top: -146px;
+        //left: 5%;
+    }
+    
+    </style>
+  </head>
+  <body>
+  <div id="navbar" class="headdiv">
+  <!--img class= "headr" src="https://cdn.steemitimages.com/DQmcwi7CN4vE49kd8oXBCmAHMkJHeKa3ZqugqswZozbu7Sk/image.png" /-->
+    <div class="subhead"><center>@HALO TOP Witness # 2</center></div>
+  
+  
+  </div>
+	<script>
+var query = {tag: 'halo', limit: 20};
+bears.api.getDiscussionsByBlog(query, function (err, results) {
+  if (err!=null) {console.log(err);};
+  var converter = new showdown.Converter();
+  var len = results.length;
+  for (var i = 0; i < len; i++) {
+    var result = results[i];
+    console.log(result);
+    if(result.parent_author == ""){
+    var p_header = "By: " + result.author + " Posted on the: "+ result.active +"   |   "
+    } else {
+    var p_header = "By: " + result.author + "replied to: "+ result.parent_author +"   |   "   
+    }
+    var p_footer = "<hr/><br/> <center>| Vote | Share | Comment |</center> <br/><hr/>";
+    console.log(result.parent_author);
+        //var metajres = result.json_metadata;
+        //console.log(metajres);
+    
+
+        //  var len = metajres.length;
+        //  for (var i = 0; i < len; i++) {
+        //    var metas = metajres[i];
+       //     console.log(metas["tags"]);            
+       //   }
+    var res = result.body.replace(/https:/g, "![](https:");  
+    var respng = res.replace(/png/g, "png)");
+    var resgif = respng.replace(/gif/g, "gif)");        
+    var res = resgif.replace(/jpg/g, "jpg)");        
+	var markdownString= "<h2><a href=\"https://bearshares.com/@" + result.author + "/" +result.permlink + "\">" + result.title + "</a></h2>" + "<div class=\"inner\"><center>" + p_header + "In Category: " + result.category + "   |  Post payout: " + result.pending_payout_value + "</center></div>" + res + p_footer;
+	document.getElementById("nnarvaez").innerHTML += converter.makeHtml(markdownString);
+  }
+});
+	</script>
+
+   
+	<script>
+// When the user scrolls down, hide the navbar. When the user scrolls up, show the navbar 
+    var prevScrollpos = window.pageYOffset;
+    window.onscroll = function() {
+      var currentScrollPos = window.pageYOffset;
+      if (prevScrollpos > currentScrollPos) {
+        document.getElementById("navbar").style.top = "0";
+      } else {
+        document.getElementById("navbar").style.top = "-250px";
+      }
+      prevScrollpos = currentScrollPos;
+    }    
+	</script>    
+    <div style="margin-top: 210px;">
+
+            <div class= "censored" id="nnarvaez"></div>
+
+        </div>  
+
+        
+    </div> 
+  </body>
+</html>
